@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waddle</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
 
     <link
@@ -15,7 +16,8 @@
 
 <body>
 
-<h1> &#x1f986 Waddle &#x1f986 </h1>
+<h1> &#x1f986 Waddle &#x1f986
+</h1>
 
 <div id = "threetop">
     <img src="duckfoot2.png" alt="Duck Steps Graphic">
@@ -70,171 +72,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="script.js" type="module"></script>
 
-<div id="myModal" class = "modal2">
+<div id="myModal" class = "popupwindow">
     <div class="modal-content">
         <p>You Win!</p>
-        <span class="span">&times; Close Window  </span>
+        <div class="close">&times; Close </div>
+        <button id = "resultsbutton">Copy Results</button>
     </div>
 </div>
 
 
 </body>
 </html>
-<style>
-    h1 {
-        text-align: center;
-        font-family: oregonFont2, serif;
-        font-size: 50px;
-        color: #70542b;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-    }
-
-    img {
-        scale: 0.6;
-        height: 500px;
-        filter: brightness(110%);
-    }
-    body {
-        background-color: rgba(0, 112, 48, 0.9)
-
-    }
-
-    game-board {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(100, 200, 130, 0.3);
-        border: 2px rgba(253, 253, 99, 0.76) solid;
-        padding: 5px;
-        margin-bottom: 50px;
-
-    }
-    threetop {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: -5rem;  /*KEYBOARD DISTANCE SIZE*/
-        border-style: solid none none none;
-        border-color: rgba(235, 244, 160, 0.3);
-        border-width: 1px;
-    }
-    letter-box {
-        border: 2px solid gray;
-        border-radius: 3px;
-        background-color: rgba(220, 250, 225, 1);
-        margin: 2px;
-        font-size: 2.3rem;
-        font-weight: 550;
-        height: 3rem;
-        width: 3rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-transform: uppercase;
-        font-family: "Helvetica Neue", serif;
-    }
-
-    filled-box {
-        border: 2px solid darkslategray;
-        animation-duration: 0.4s
-    }
-    @keyframes animatetop {
-        from {margin-bottom: 10px; opacity: 0.5}
-        to {margin-bottom: 0; opacity: 1}
-    }
-
-    letter-row {
-        display: flex;
-    }
-    keyboard-cont {
-        margin: 1rem 25rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        background-color: rgba(32, 60, 45, 0.68);
-        padding: 1rem;
-        border-radius: 4rem;
-    }
-
-
-    #keyboard-cont div {
-        display: flex;
-    }
-
-    second-row {
-        margin: 0.5rem 0;
-    }
-
-    keyboard-button {
-        font-size: 1rem;
-        font-weight: 700;
-        padding: 0.6rem; /*general widt of key boxes*/
-        margin: 0 2px;
-        cursor: pointer;
-        text-transform: uppercase;
-        font-family: oregonFontSmall, serif;
-    }
-
-    modal2 {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
-
-    /*POPUP WINDOWS*/
-    /* Modal Content/Box */
-    .modal-content {
-        background-color: #bfffbf;
-        margin: 15% auto; /* 15% from the top and centered */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%; /* Could be more or less, depending on screen size */
-        animation-name: fadein;
-        animation-duration: 0.4s
-    }
-    @keyframes fadein { /*animation for poopup windiw*/
-        from {top: -10px; opacity: 0}
-        to {top: 0; opacity: 1}
-    }
-
-    /* The Close Button */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    /*/POPUP WINDOWS*/
-
-
-
-    @font-face {
-        font-family: oregonFont;
-        src: url(https://cdn.uoregon.edu/uocdn1/uo-web-design-framework/Universal/stable-assets/fonts/United/UnitedSerifRgMd.woff2);
-    }
-    @font-face {
-        font-family: oregonFont2;
-        src: url(https://cdn.uoregon.edu/uocdn1/uo-web-design-framework/Universal/stable-assets/fonts/United/UnitedSerifRgBd.woff2);
-    }
-    @font-face {
-        font-family: oregonFontSmall;
-        src: url(https://cdn.uoregon.edu/uocdn1/uo-web-design-framework/Universal/stable-assets/fonts/SourceSansVariable-Roman.ttf.woff2);
-    }
-</style>
