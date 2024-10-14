@@ -7,10 +7,14 @@ const WORD_LENGTH = rightGuessString.length;
 let guessesRemaining = NUMBER_OF_GUESSES;
 let currentGuess = [];
 let nextLetter = 0;
-//let rightGuessString = WORDS[Math.floor(Math.random() * WORDS.length)]
+//let rightGuessString = Fiveletterwords[Math.floor(Math.random() * Fiveletterwords.length)]
+
+let resultsString = "";
+let isClear = false;
 
 let modal2 = document.getElementById("myModal"); //getting variables for popup window
-let span = document.getElementsByClassName("span")[0];
+let close = document.getElementsByClassName("close")[0];
+let gameboard = document.getElementById("game-board");
 
 function initBoard() {
     let board = document.getElementById("game-board");
@@ -49,7 +53,7 @@ document.addEventListener("keyup", (e) => {
 
     let found = pressedKey.match(/[a-z]/gi)
     if (!found || found.length > 1) {
-        return
+        return;
     } else {
         insertLetter(pressedKey)
     }
@@ -105,6 +109,7 @@ function checkGuess () {
         // is letter in the correct guess
         if (letterPosition === -1) {
             letterColor = 'grey'
+            resultsString += "⬜";
         } else {
             // now, letter is definitely in word
             // if letter index and right guess index are the same
@@ -112,9 +117,11 @@ function checkGuess () {
             if (currentGuess[i] === rightGuess[i]) {
                 // shade green
                 letterColor = 'green'
+                resultsString += "🟩";
             } else {
                 // shade box yellow
                 letterColor = 'yellow'
+                resultsString += "🟨";
             }
 
             rightGuess[letterPosition] = "#"
@@ -127,11 +134,13 @@ function checkGuess () {
             shadeKeyBoard(letter, letterColor)
         }, delay)
     }
+    resultsString += "\n";
 
     if (guessString === rightGuessString) { //GAME END
         toastr.success("You guessed right! Game over!")
         guessesRemaining = 0
         modal2.style.display = "block";
+        isClear = true;
         return
     } else {
         guessesRemaining -= 1;
@@ -141,6 +150,7 @@ function checkGuess () {
         if (guessesRemaining === 0) {
             toastr.error("You've run out of guesses! Game over!")
             toastr.info(`The right word was: "${rightGuessString}"`)
+            isClear = true;
         }
     }
 }
@@ -163,12 +173,12 @@ function shadeKeyBoard(letter, color) {
 }
 
 document.getElementById("keyboard-cont").addEventListener("click", (e) => {
-    const target = e.target
+    const target = e.target;
 
     if (!target.classList.contains("keyboard-button")) {
         return
     }
-    let key = target.textContent
+    let key = target.textContent;
 
     if (key === "Del") {
         key = "Backspace"
@@ -176,9 +186,14 @@ document.getElementById("keyboard-cont").addEventListener("click", (e) => {
 
     document.dispatchEvent(new KeyboardEvent("keyup", {'key': key}))
 })
+document.getElementById("resultsbutton").addEventListener("click", (e) => {
+
+    navigator.clipboard.writeText("🦆Waddle Results🦆\n" + resultsString);
+    toastr.success("Copied to clipboard!");
+})
 
 
-span.onclick = function() {
+close.onclick = function() {
     modal2.style.display = "none";
 }
 // When the user clicks anywhere outside of the modal, close it
@@ -187,5 +202,15 @@ window.onclick = function(event) {
         modal2.style.display = "none";
     }
 }
+//when the user clicks on gameboarf after game, pop up
+gameboard.onmouseover = function() {
+    if(isClear) {
+        gameboard.style.cursor = "pointer";
+    }
+}
+gameboard.onclick = function() {
+    if(isClear) {
+        modal2.style.display = "block";
+    }
 
-
+}
