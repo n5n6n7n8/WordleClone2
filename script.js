@@ -1,4 +1,4 @@
-import { WORDS } from "./newWordList.js";
+import { WORDS } from "https://raw.githubusercontent.com/n5n6n7n8/WordleClone2/refs/heads/main/newWordList.js";
 let d = new Date();
 let t = d.getTime();
 let days = Math.floor(t / (86400000)); //Oct 17 24: 20014
