@@ -1,16 +1,36 @@
 import { WORDS } from "./newWordList.js";
+let d = new Date();
+let t = d.getTime();
+let days = Math.floor(t / (86400000)); //Oct 17 24: 20014
+const answers = ["ducks", "quick", "flock", "class", "floor", "agate", "young", "bumpy", "sweet"];
 
-let rightGuessString = "ducks"
-const NUMBER_OF_GUESSES = 6;
+/* IMPORTANT! These four variables determine important aspects of the game.*/
+const numberOfGuesses = 6; // The number of guesses the player gets
+let additionalMessage = ""; // This is for linking to articles that may relate to the answer
+let additionalLink = ""; // This is the link to the article
+let rightGuessString = answers[days-20012]; // The answer for today
+
+let gameoverinfo = document.getElementById("gameOverInfo");
+gameoverinfo.textContent = "Answer: " + rightGuessString.toUpperCase() + " ";
+if(additionalLink !== "" && additionalMessage !== ""){
+    let addLink = document.getElementById("gameOverLink");
+    addLink.textContent = additionalMessage;
+    addLink.href = additionalLink;
+}
+
+//wordle id number = current day - 20014
 
 const WORD_LENGTH = rightGuessString.length;
-let guessesRemaining = NUMBER_OF_GUESSES;
+let guessesRemaining = numberOfGuesses;
 let currentGuess = [];
 let nextLetter = 0;
-//let rightGuessString = Fiveletterwords[Math.floor(Math.random() * Fiveletterwords.length)]
+//let rightGuessString = Fiveletterwords[Math.floor(Math.random() * Fiveletterwords.length)] //pick random word
 
-let resultsString = "";
-let isClear = false;
+let resultsString = ""; //copy results string
+let isClear = false; //is the game finished
+
+/*let test = document.getElementById("test");
+test.innerText = ""+days;*/
 
 let modal2 = document.getElementById("myModal"); //getting variables for popup window
 let close = document.getElementsByClassName("close")[0];
@@ -19,7 +39,7 @@ let gameboard = document.getElementById("game-board");
 function initBoard() {
     let board = document.getElementById("game-board");
 
-    for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
+    for (let i = 0; i < numberOfGuesses; i++) {
         let row = document.createElement("div")
         row.className = "letter-row"
 
@@ -64,7 +84,7 @@ function insertLetter (pressedKey) {
     }
     pressedKey = pressedKey.toLowerCase()
 
-    let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining]
+    let row = document.getElementsByClassName("letter-row")[numberOfGuesses - guessesRemaining]
     let box = row.children[nextLetter]
     box.textContent = pressedKey
     box.classList.add("filled-box")
@@ -72,7 +92,7 @@ function insertLetter (pressedKey) {
     nextLetter += 1
 }
 function deleteLetter () {
-    let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining]
+    let row = document.getElementsByClassName("letter-row")[numberOfGuesses - guessesRemaining]
     let box = row.children[nextLetter - 1]
     box.textContent = ""
     box.classList.remove("filled-box")
@@ -80,12 +100,12 @@ function deleteLetter () {
     nextLetter -= 1
 }
 function checkGuess () {
-    let row = document.getElementsByClassName("letter-row")[NUMBER_OF_GUESSES - guessesRemaining]
+    let row = document.getElementsByClassName("letter-row")[numberOfGuesses - guessesRemaining]
     let guessString = ''
     let rightGuess = Array.from(rightGuessString)
 
     for (const val of currentGuess) {
-        guessString += val
+        guessString += val;
     }
 
     if (guessString.length !== WORD_LENGTH) {
@@ -98,17 +118,19 @@ function checkGuess () {
         return
     }
     //do animatino
-    document.getElementsByClassName("letter-box").animation = "animatetop 2s 2s forward";
+    //document.getElementsByClassName("letter-box").animation = "animatetop 2s 2s forward";
 
     for (let i = 0; i < WORD_LENGTH; i++) {
         let letterColor = ''
         let box = row.children[i]
         let letter = currentGuess[i]
+        let animName = "";
 
         let letterPosition = rightGuess.indexOf(currentGuess[i])
         // is letter in the correct guess
         if (letterPosition === -1) {
-            letterColor = 'grey'
+            letterColor = "rgb(136, 134, 134)";
+            animName = "tileturngy";
             resultsString += "⬜";
         } else {
             // now, letter is definitely in word
@@ -116,22 +138,26 @@ function checkGuess () {
             // letter is in the right position
             if (currentGuess[i] === rightGuess[i]) {
                 // shade green
-                letterColor = 'green'
+                letterColor = 'rgb(90, 163, 46)';
+                animName = "tileturngn";
                 resultsString += "🟩";
             } else {
                 // shade box yellow
-                letterColor = 'yellow'
+                letterColor = "rgb(229, 237, 62)";
+                animName = "tileturnyel";
                 resultsString += "🟨";
             }
 
             rightGuess[letterPosition] = "#"
         }
 
-        let delay = 250 * i
+        let delay = 200 * i
         setTimeout(()=> {
             //shade box
-            box.style.backgroundColor = letterColor
-            shadeKeyBoard(letter, letterColor)
+            box.style.backgroundColor = letterColor;
+            box.style.animationName = animName;
+            shadeKeyBoard(letter, letterColor);
+
         }, delay)
     }
     resultsString += "\n";
@@ -139,18 +165,22 @@ function checkGuess () {
     if (guessString === rightGuessString) { //GAME END
         toastr.success("You guessed right! Game over!")
         guessesRemaining = 0
-        modal2.style.display = "block";
-        isClear = true;
-        return
+        setTimeout(()=> {modal2.style.display = "block";
+            isClear = true;}, 2000);
+
+        return;
     } else {
         guessesRemaining -= 1;
         currentGuess = [];
         nextLetter = 0;
 
         if (guessesRemaining === 0) {
-            toastr.error("You've run out of guesses! Game over!")
-            toastr.info(`The right word was: "${rightGuessString}"`)
-            isClear = true;
+            toastr.error("You've run out of guesses! Game over!");
+            toastr.info(`The right word was: "${rightGuessString}"`);
+            setTimeout(()=> {modal2.style.display = "block";
+                isClear = true;}, 2000);
+            document.getElementById("gameOverMessage").innerText = "Next time!";
+
         }
     }
 }
@@ -214,3 +244,5 @@ gameboard.onclick = function() {
     }
 
 }
+
+
