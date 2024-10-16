@@ -2,19 +2,28 @@ h1 {
     text-align: center;
     font-family: oregonFont2, serif;
     font-size: 50px;
-    color: #d5f3bc;
-    font-weight: 500;
+    color: rgba(230, 255, 0, 0.81);
+    font-weight: bold;
     margin-bottom: 0.5rem;
 }
+p {
+    font-size: 33px;
+    font-weight: bold;
+    //font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: oregonFont2, serif;
+    align-content: center;
+    text-align: center;
+    text-space: 100px;
 
+    border-bottom: 1px solid rgba(42, 80, 42, 0.33);
+}
 img {
     scale: 0.6;
     height: 500px;
     filter: brightness(110%);
 }
 body {
-    background-color: rgba(0, 112, 48, 0.9)
-
+    background-color: rgba(0, 112, 48, 0.9);
 }
 
 #game-board {
@@ -23,7 +32,8 @@ body {
     justify-content: center;
     align-items: center;
     background-color: rgba(100, 200, 130, 0.3);
-    border: 2px rgba(253, 253, 99, 0.76) solid;
+    border: 2px rgba(230, 255, 0, 0.81) solid;
+
     padding: 5px;
     margin-bottom: 50px;
 
@@ -32,6 +42,7 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
+    //padding-top: 30px;
         margin-bottom: -5rem;  /*KEYBOARD DISTANCE SIZE*/
     border-style: solid none none none;
     border-color: rgba(235, 244, 160, 0.3);
@@ -44,40 +55,86 @@ body {
     background-color: rgba(220, 250, 225, 1);
     margin: 2px;
     font-size: 2.3rem;
-    font-weight: 550;
+    font-weight: bolder;
     height: 3rem;
     width: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
     text-transform: uppercase;
-    font-family: "Helvetica Neue", serif;
-}
+    font-family: Playfair Display, Geneva, Tahoma, sans-serif;
 
+}
+@keyframes tileturngy{
+    0%{
+        transform: scaleY(1);
+        background-color: white;
+    }
+    50%{
+        transform: scaleY(0);
+        background-color: white;
+    }
+    51%{
+        background-color: rgb(136, 134, 134);
+    }
+    100%{
+        transform: scaleY(1);
+    }
+}
+@keyframes tileturnyel{
+    0%{
+        transform: scaleY(1);
+        background-color: white;
+    }
+    50%{
+        background-color: white;
+        transform: scaleY(0);
+
+    }
+    51%{
+        background-color: rgb(229, 237, 62);
+    }
+    100%{
+        transform: scaleY(1);
+    }
+}
+@keyframes tileturngn{
+    0%{
+        transform: scaleY(1);
+        background-color: white;
+    }
+    50%{
+        transform: scaleY(0);
+        background-color: white;
+    }
+    51%{
+        background-color: rgb(90, 163, 46);
+    }
+    100%{
+        transform: scaleY(1);
+    }
+}
 .filled-box {
     border: 2px solid darkslategray;
-    animation-duration: 0.4s
+    animation-duration: 1s;
 }
-@keyframes animatetop {
-    from {margin-bottom: 10px; opacity: 0.5}
-    to {margin-bottom: 0; opacity: 1}
-}
+
 
 .letter-row {
     display: flex;
 }
 #keyboard-cont {
-    margin: 1rem 25rem;
+    margin-top: 1rem;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
     background-color: rgba(32, 60, 45, 0.68);
     padding: 1rem;
     border-radius: 4rem;
 }
-
-
 #keyboard-cont div {
     display: flex;
 }
@@ -107,58 +164,75 @@ body {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
 }
 
 /*POPUP WINDOWS*/
 /* Modal Content/Box */
 .modal-content {
-    background-color: #bfffbf;
+    background-color: #bcffbc;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    border: 1px solid #253c25;
+    //width: 23%; /* Could be more or less, depending on screen size */
+    //height: 25%;
+    width: 300px; /* Could be more or less, depending on screen size */
+    height: 225px;
     animation-name: fadein;
     animation-duration: 0.8s;
     animation-timing-function: ease-out;
+    border-radius: 2px;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 @keyframes fadein { /*animation for poopup windiw*/
-    from {width: 30%; opacity: 0}
-    to {width: 80%; opacity: 1}
+    from {width: 200px; opacity: 0}
+    to {width: 300px; opacity: 1}
 }
 
 /* The Close Button */
 .close {
-    color: #aaa;
+    color: #afadad;
     //float: right;
-    font-size: 28px;
+    font-size: 15px;
     font-weight: bold;
+    justify-content: flex-end;
+    align-self: flex-end;
+    font-family: oregonFont2, serif;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #747773;
     text-decoration: underline;
     cursor: pointer;
 }
 #resultsbutton {
-
-
+    height: 70px;
+    font-family: Playfair Display, Geneva, Tahoma, sans-serif;
+    //background-color: aquamarine;
+}
+#gameOverInfo {
+    font-family: oregonFont2, Geneva, Tahoma, sans-serif;
+    font-size: 17px;
+    padding-bottom: 10px;
+}
+#gameOverLink {
+    font-family: oregonFont2, Geneva, Tahoma, sans-serif;
+    font-size: 15px;
+    padding-bottom: 20px;
 }
 /*/POPUP WINDOWS*/
 
 
-
-@font-face {
-    font-family: oregonFont;
-    src: url(https://cdn.uoregon.edu/uocdn1/uo-web-design-framework/Universal/stable-assets/fonts/United/UnitedSerifRgMd.woff2);
-}
 @font-face {
     font-family: oregonFont2;
-    src: url(https://cdn.uoregon.edu/uocdn1/uo-web-design-framework/Universal/stable-assets/fonts/United/UnitedSerifRgBd.woff2);
+    src: url(https://fonts.gstatic.com/s/playfairdisplay/v37/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgEM86xQ.woff2);
 }
 @font-face {
     font-family: oregonFontSmall;
-    src: url(https://cdn.uoregon.edu/uocdn1/uo-web-design-framework/Universal/stable-assets/fonts/SourceSansVariable-Roman.ttf.woff2);
+    src: url(https://fonts.gstatic.com/s/notosans/v36/o-0bIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjc5a7du3mhPy0.woff2);
 }
