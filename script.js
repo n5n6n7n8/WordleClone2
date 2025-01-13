@@ -1,14 +1,14 @@
 import {Fiveletterwords} from "https://dl.dropbox.com/scl/fi/c4zs697uhqioskoq1lhhc/fiveletterwords.js?rlkey=l6t52fom0yqsypnyt4ok0prd8&st=lnmmei7s&dl=0";
 let d = new Date();
 let t = d.getTime();
-let days = Math.floor(t / (3600000)) - 8; //get in hour time change from utc to pacific
-days = Math.floor(days/24);//Oct 22 24: 20019 //divide for days
-days -= 20089; //Represents days since Jan 1 2025. Used to distinguish time
+let days = Math.floor(t / (3600000)) - 8; //Get in hour time change from utc to pacific
+days = Math.floor(days/24);//Divide for days
+days -= 20089; //Represents days since Jan 1 2025. Used to distinguish time when getting words from Google Sheets
 
 const numberOfGuesses = 6; // The number of guesses the player gets
 let rightGuessString = "DUCKS";
-let additionalMessage = "Tis is a placeholder message! Lets goooo oregon ducks rahhh lets scko sko sko fight ducks fight win fight go shoud shout!!!!"; // This is for linking to articles that may relate to the answer
-let additionalLink = "https://communications.uoregon.edu/uo-brand/visual-identity/fonts#text-styles"; // This is the link to the article
+let additionalMessage = "This is a placeholder message."; // This is for linking to articles that may relate to the answer
+let additionalLink = "https://dailyemerald.com"; // This is the link to the article
 console.log("days = " + days);
 
 //I tried to change the default "Private: Waddle" text header to the logo designed by the team, however the code wasn't able to fetch the header
@@ -18,11 +18,10 @@ console.log("days = " + days);
 // WaddleLogoImg.src = "https://dl.dropbox.com/scl/fi/fnvbsogx6p17v4mfinhpy/TheWaddle_Logo-08.jpg?rlkey=u5a5ifhzey46v9w4e1zjxjom0&st=444i3ow6&dl=0";
 // mainHeader.appendChild(WaddleLogoImg);
 
-//Handles all spreadsheet importing words
+//Imports words from google spreadsheet, containing words, dates, article links, and descriptions
 const sheetId = "1M2FLT7xmoaDcnTI5_hrYnzw5-IXXJoE8H-MK6fDXvWA";
 const sheetName = encodeURIComponent("WaddleDataSheet");
 const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
-
 fetch(sheetURL)
   .then((response) => response.text())
   .then((csvText) => handleResponse(csvText));
@@ -45,22 +44,16 @@ function csvToObjects(csv) {
       let row = csvSplit(csvRows[i]);
       for (let j = 0, max = row.length; j < max; j++) {
         thisObject[propertyNames[j]] = row[j];
-        // BELOW 4 LINES WILL CONVERT DATES IN THE "ENROLLED" COLUMN TO JS DATE OBJECTS
-        // if (propertyNames[j] === "Enrolled") {
-        //   thisObject[propertyNames[j]] = new Date(row[j]);
-        // } else {
-        //   thisObject[propertyNames[j]] = row[j];
-        // }
       }
       objects.push(thisObject);
     }
     return objects;
   }
-  
   function csvSplit(row) {
     return row.split(",").map((val) => val.substring(1, val.length - 1));
   }
 
+  
 //Sets up the win/lose screen
 setTimeout(() => { 
     let gameoverinfo = document.getElementById("gameOverInfo");
