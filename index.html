@@ -1,11 +1,11 @@
-<!-- NOTE: Do not click the Visual tab above, it reformats the code here so that it doesn't function. Revert to the latest revision if you do. Thanks!-->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waddle</title>
-    <link rel="stylesheet" href="https://dl.dropbox.com/scl/fi/uik17seu0mal84zqjb4ty/style.css?rlkey=mpj6g6rgqqib8q783o50ycly6&st=bunvs247&dl=0">
+    <link rel = "stylesheet" href="style2.css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
 
     <link
@@ -13,17 +13,15 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
 </head>
-
-<body>[related title="" stories="" align="left" background="on" background_color="#007030" border="all" border_color="#888888" border_size="5px" shadow="on"]
-
-<h1 id = "head"> &#x1f986; Waddle &#x1f986; </h1>
+<body>
+<h2 id = "logoHeader"> <img src="https://dl.dropbox.com/scl/fi/fnvbsogx6p17v4mfinhpy/TheWaddle_Logo-08.jpg?rlkey=u5a5ifhzey46v9w4e1zjxjom0&st=444i3ow6&dl=0">
+</h2>
 
 <div id = "threetop">
-    <img src="https://dl.dropboxusercontent.com/scl/fi/602gn52clsqekpqreid1n/duckfoot2.png?rlkey=ldldtjh8y4d4qvopjmpzca1q1&st=3p4v9hsh&dl=0" alt="Duck Steps Graphic">
+    <img src="https://dl.dropbox.com/scl/fi/602gn52clsqekpqreid1n/duckfoot2.png?rlkey=ldldtjh8y4d4qvopjmpzca1q1&st=3p4v9hsh&dl=0" alt="Duck Steps Graphic" id="duckSteps">
     <div id="game-board">
-
     </div>
-    <img src="https://dl.dropboxusercontent.com/scl/fi/602gn52clsqekpqreid1n/duckfoot2.png?rlkey=ldldtjh8y4d4qvopjmpzca1q1&st=3p4v9hsh&dl=0" alt="Duck Steps Graphic">
+    <img src="https://dl.dropbox.com/scl/fi/602gn52clsqekpqreid1n/duckfoot2.png?rlkey=ldldtjh8y4d4qvopjmpzca1q1&st=3p4v9hsh&dl=0" alt="Duck Steps Graphic" id="duckSteps">
 </div>
 
 
@@ -64,25 +62,25 @@
     </div>
 
 </div>
+
+<div id="myModal" class = "popupwindow">
+    <div class="modal-content">
+            <div id="gameOverMessage">You Win!</div>
+            <div id="gameOverInfo"> T </div>
+            <a href="https://dailyemerald.com/" id="gameOverLink"></a>
+            <button id = "resultsbutton">Copy Results</button>
+    </div>
+
+</div>
+<script src="script.js" type="module"></script>
 <script
         src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script type = "module" src="https://dl.dropbox.com/scl/fi/xmd8z23bnr2g24g9jgpzk/script.js?rlkey=gezz1e9pqgkh0fv5ui9dm93ph&st=adm1z7y7&dl=0"></script>
 
-<div id="myModal" class = "popupwindow">
-    <div class="modal-content">
-        <div class="close">&times; Close </div>
-        <p id="gameOverMessage">You Win!</p>
-        <div id="gameOverInfo"> T </div>
-        <a href="https://dailyemerald.com/" id="gameOverLink"></a>
-        <button id = "resultsbutton">Copy Results</button>
-
-    </div>
-
-</div>
 
 
 </body>
 </html>
+
