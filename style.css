@@ -1,4 +1,4 @@
-h2 {
+/* h2 {
     align-items: center;
     /*font-family: oregonFont2, serif;
     font-size: 50px;
@@ -8,7 +8,7 @@ h2 {
     scale: 0.2;
     width:102%;
     height: 6rem;
-}
+} */
 p {
     font-weight: bold;
     font-family: oregonFont2, Verdana, serif;
@@ -27,6 +27,7 @@ p {
         display: none;
     }
 }
+
 
 /*yellow #FFFF00
 green # #39B54A
@@ -223,6 +224,7 @@ green # #39B54A
     height: 40px;
     width: 7rem;
     margin-top: 2rem;
+    margin-left:0.7rem;
     font-family: oregonFont2, Geneva, Tahoma, sans-serif;
     background-color: #dadacd;
     transition-duration: 0.3s;
@@ -269,4 +271,22 @@ green # #39B54A
 @font-face {
     font-family: oregonFontSmall;
     src: url(https://fonts.gstatic.com/s/notosans/v36/o-0bIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjc5a7du3mhPy0.woff2);
+}
+@media screen and (max-width: 440px) {
+    .keyboard-button{
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 0.40rem; 
+        margin: 0 2.5px;
+    }
+    #threetop{
+        padding-left:0.5rem;
+    }
+    #keyboard-cont{            
+        padding-left:0.5rem;
+    }
+    .letter-box{
+        height: 3.2rem;
+        width: 3.2rem;
+    }
 }
