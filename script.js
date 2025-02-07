@@ -1,4 +1,4 @@
-import {Fiveletterwords} from "https://dl.dropbox.com/scl/fi/c4zs697uhqioskoq1lhhc/fiveletterwords.js?rlkey=l6t52fom0yqsypnyt4ok0prd8&st=lnmmei7s&dl=0";
+import {Fiveletterwords} from "https://dl.dropbox.com/scl/fi/c4zs697uhqioskoq1lhhc/fiveletterwords.js?rlkey=l6t52fom0yqsypnyt4ok0prd8&st=6cznj4kw&dl=0";
 let d = new Date();
 let t = d.getTime();
 let days = Math.floor(t / (3600000)) - 8; //Get in hour time change from utc to pacific
@@ -7,16 +7,34 @@ days -= 20089; //Represents days since Jan 1 2025. Used to distinguish time when
 
 const numberOfGuesses = 6; // The number of guesses the player gets
 let rightGuessString = "DUCKS";
-let additionalMessage = "This is a placeholder message."; // This is for linking to articles that may relate to the answer
-let additionalLink = "https://dailyemerald.com"; // This is the link to the article
-console.log("days = " + days);
+let additionalMessage = "Read news and more on the Daily Emerald website!"; // This is for linking to articles that may relate to the answer
+let additionalLink = "dailyemerald.com"; // This is the link to the article
+let authorName = "";
+let isLoading = true;
 
-//I tried to change the default "Private: Waddle" text header to the logo designed by the team, however the code wasn't able to fetch the header
-// let mainHeader = document.getElementsByTagName('h1')[0]; 
-// mainHeader.textContent = "";
-// const WaddleLogoImg = document.createElement('img');
-// WaddleLogoImg.src = "https://dl.dropbox.com/scl/fi/fnvbsogx6p17v4mfinhpy/TheWaddle_Logo-08.jpg?rlkey=u5a5ifhzey46v9w4e1zjxjom0&st=444i3ow6&dl=0";
-// mainHeader.appendChild(WaddleLogoImg);
+let onColorblindMode = false;
+
+let WORD_LENGTH = rightGuessString.length;
+let guessesRemaining = numberOfGuesses;
+let currentGuess = [];
+let nextLetter = 0;
+
+let resultsString = ""; //copy results string
+let isClear = false; //is the game finished
+
+const checkbox = document.getElementById("colorblindButton");
+let menuModal = document.getElementById("menuModal");
+let openMenuButton = document.getElementById("openMenuButton");
+let helpCloseButton = document.getElementById("close");
+
+let modal2 = document.getElementById("myModal"); //getting variables for popup window
+let gameboard = document.getElementById("game-board");
+
+const grayColor = "rgb(160, 160, 160)";
+const greenColor = "rgb(95, 178, 61)";
+const yellowColor = "rgb(229, 237, 62)";
+const orangeColor = "rgb(222, 128, 74)";
+const blueColor = "rgb(150, 194, 248)";
 
 //Imports words from google spreadsheet, containing words, dates, article links, and descriptions
 const sheetId = "1M2FLT7xmoaDcnTI5_hrYnzw5-IXXJoE8H-MK6fDXvWA";
@@ -29,11 +47,11 @@ fetch(sheetURL)
 function handleResponse(csvText) {
   let sheetObjects = csvToObjects(csvText);
   // sheetObjects is now an Array of Objects
-  console.log("Name of object: " + sheetObjects[days]); 
   rightGuessString = sheetObjects[days]["WORD"].toLowerCase();
-  additionalLink = sheetObjects[days]["LINK"];
   additionalMessage = sheetObjects[days]["TITLE"];
- 
+  additionalLink = sheetObjects[days]["LINK"];
+  authorName = sheetObjects[days]["AUTHOR"];
+  console.log("Finished loaing spreadsheets");
 }
 function csvToObjects(csv) {
     const csvRows = csv.split("\n");
@@ -52,29 +70,7 @@ function csvToObjects(csv) {
   function csvSplit(row) {
     return row.split(",").map((val) => val.substring(1, val.length - 1));
   }
-
-  
 //Sets up the win/lose screen
-setTimeout(() => { 
-    let gameoverinfo = document.getElementById("gameOverInfo");
-    gameoverinfo.textContent = "Answer: " + rightGuessString.toUpperCase() + " ";
-    if(additionalLink !== "" && additionalMessage !== ""){
-    let addLink = document.getElementById("gameOverLink");
-    addLink.textContent = additionalMessage;
-    addLink.href = additionalLink} 
-}, 1000); //Timeout solves bug where data in google sheets would load in before the placeholder message
-
-
-let WORD_LENGTH = rightGuessString.length;
-let guessesRemaining = numberOfGuesses;
-let currentGuess = [];
-let nextLetter = 0;
-
-let resultsString = ""; //copy results string
-let isClear = false; //is the game finished
-
-let modal2 = document.getElementById("myModal"); //getting variables for popup window
-let gameboard = document.getElementById("game-board");
 
 function initBoard() {
     let board = document.getElementById("game-board");
@@ -92,8 +88,32 @@ function initBoard() {
         board.appendChild(row)
     }
 }
+setTimeout(() => { 
+    if(isLoading){
+        toastr.info("Website is loading, please wait!");
+    }
+}, 4000); //Timeout solves bug where data in google sheets would load in before the placeholder message
+window.onload = (event) => {
+    isLoading = false;
+    initBoard();
+    console.log("page is fully loaded");
+};
 
-initBoard()
+
+
+function setEndGameText(){
+    let gameoverinfo = document.getElementById("gameOverInfo");
+    gameoverinfo.textContent = "Answer: " + rightGuessString.toUpperCase() + " ";
+    let addLink = document.getElementById("gameOverLink");
+    addLink.textContent = additionalMessage;
+    addLink.href = additionalLink;
+    if(authorName!==""){
+        let authorNameTag = document.getElementById("authorInfo");
+        authorNameTag.textContent = "Article by " + authorName;
+    }
+}
+
+
 document.addEventListener("keyup", (e) => {
 
     if (guessesRemaining === 0) {
@@ -110,7 +130,6 @@ document.addEventListener("keyup", (e) => {
         checkGuess()
         return
     }
-
     let found = pressedKey.match(/[a-z]/gi)
     if (!found || found.length > 1) {
         return;
@@ -159,66 +178,7 @@ function checkGuess () {
         return
     }
 
-    /*for (let index = 0; i < WORD_LENGTH; i++){ //VERSION 2 ITERATION W/O ENHANCED FOR
-        let box = row.children[index];
-        let letter = currentGuess[index];
-        let delay = 200 * index;
-        setTimeout(()=> {
-            //check!
-            if(toColor[index]===0){ //COLOR GRAY
-                box.style.backgroundColor = "rgb(136, 134, 134)";
-                box.style.animationName = "tileturngy";
-                resultsString += "⬜";
-                shadeKeyBoard(letter, "rgb(136, 134, 134)");
-            }
-            else if(toColor[index]===1){ //COLOR YRLLOW
-                box.style.backgroundColor = "rgb(229, 237, 62)";
-                box.style.animationName = "tileturnyel";
-                resultsString += "🟨";
-                shadeKeyBoard(letter, "rgb(229, 237, 62)");
-
-            }
-            else{
-                box.style.backgroundColor = 'rgb(90, 163, 46)';
-                box.style.animationName = "tileturngn";
-                resultsString += "🟩";
-                shadeKeyBoard(letter, 'rgb(90, 163, 46)');
-            }
-            
-
-        }, delay)
-    }/*
-    /*row.children.forEach((element,index) => { //VERSION 1 ITERATION
-        let delay = 200 * index
-        setTimeout(()=> {
-            //check!
-            if(toColor[index]===0){ //COLOR GRAY
-                element.style.backgroundColor = "rgb(136, 134, 134)";
-                element.style.animationName = "tileturngy";
-                resultsString += "⬜";
-                shadeKeyBoard(realCur[index], "rgb(136, 134, 134)");
-            }
-            else if(toColor[index]===1){ //COLOR YRLLOW
-                element.style.backgroundColor = "rgb(229, 237, 62)";
-                element.style.animationName = "tileturnyel";
-                resultsString += "🟨";
-                shadeKeyBoard(realCur[index], "rgb(229, 237, 62)");
-
-            }
-            else{
-                element.style.backgroundColor = 'rgb(90, 163, 46)';
-                element.style.animationName = "tileturngn";
-                resultsString += "🟩";
-                shadeKeyBoard(realCur[index], 'rgb(90, 163, 46)');
-            }
-            
-
-        }, delay)
-    });
-    resultsString += "\n";*/
-
-
-    for (let i = 0; i < WORD_LENGTH; i++) { //ice but when I TYPE A LETTER IT TYPESE THE LETTER I PUTON THE KEYBOAARD     
+    for (let i = 0; i < WORD_LENGTH; i++) {
         let letterColor = ''
         let box = row.children[i]
         let letter = currentGuess[i]
@@ -229,7 +189,7 @@ function checkGuess () {
         
 
         if (letterPosition === -1) {
-            letterColor = "rgb(136, 134, 134)";
+            letterColor = grayColor;
             animName = "tileturngy";
             resultsString += "⬜";
             rightGuess[letterPosition] = "#"
@@ -239,21 +199,33 @@ function checkGuess () {
             // letter is in the right position
             if (currentGuess[i] === rightGuess[i]) {
                 // shade green
-                letterColor = 'rgb(90, 163, 46)';
-                animName = "tileturngn";
+                if(onColorblindMode){
+                    letterColor = orangeColor;
+                    animName = "tileturnor";
+                }
+                else{
+                    letterColor = greenColor;
+                    animName = "tileturngn";
+                }
                 resultsString += "🟩"; //
                 rightGuess[letterPosition] = "#"
             } else { //if the letter that appears later is in the right place, 
                 let nextIndex = rightGuess.slice(i+1).indexOf(currentGuess[i]);
                 if(currentGuess[nextIndex+i+1]===rightGuess[nextIndex+i+1]){
                     //shade gray, because the one later is right
-                    letterColor = "rgb(136, 134, 134)";
+                    letterColor = grayColor;
                     animName = "tileturngy";
                     resultsString += "⬜";
                 }else{
                 // shade box yellow
-                letterColor = "rgb(229, 237, 62)";
-                animName = "tileturnyel";
+                if(onColorblindMode){
+                    letterColor = blueColor;
+                    animName = "tileturnbl";
+                }
+                else{
+                    letterColor = yellowColor;
+                    animName = "tileturnyel";
+                }
                 resultsString += "🟨";
                 rightGuess[letterPosition] = "#"
                 }
@@ -272,8 +244,9 @@ function checkGuess () {
     }
     resultsString += "\n";
 
-    ///CHECK OTHER BACKEND
     if (guessString === rightGuessString) { //GAME END
+        setEndGameText();
+        resultsString += "dailyemerald.com/waddle";
         toastr.success("You guessed right! Game over!")
         guessesRemaining = 0
         setTimeout(()=> {modal2.style.display = "block";
@@ -286,8 +259,9 @@ function checkGuess () {
         nextLetter = 0;
 
         if (guessesRemaining === 0) {
+            setEndGameText();
+            resultsString += "dailyemerald.com/waddle";
             toastr.error("You've run out of guesses! Game over!");
-            toastr.info(`The right word was: "${rightGuessString}"`);
             setTimeout(()=> {modal2.style.display = "block";
                 isClear = true;}, 2000);
             document.getElementById("gameOverMessage").innerText = "Next time!";
@@ -299,16 +273,14 @@ function shadeKeyBoard(letter, color) {
     for (const elem of document.getElementsByClassName("keyboard-button")) {
         if (elem.textContent === letter) {
             let oldColor = elem.style.backgroundColor
-            if (oldColor === 'rgb(90, 163, 46)') {
+            if ((oldColor === greenColor) || oldColor === orangeColor) {
                 return
             }
-
-            if (oldColor === "rgb(229, 237, 62)" && color !== 'rgb(90, 163, 46)') {
+            if ((oldColor === yellowColor && color !== greenColor) || (oldColor === blueColor && color !== orangeColor)) {
                 return
             }
 
             elem.style.backgroundColor = color
-            elem.style.
             break
         }
     }
@@ -335,12 +307,64 @@ document.getElementById("resultsbutton").addEventListener("click", (e) => {
 })
 
 
+checkbox.addEventListener('change', function() {
+    if(!onColorblindMode){
+        for (const elem of document.getElementsByClassName("letter-box")) {
+            if(elem.style.backgroundColor == greenColor){
+                elem.style.backgroundColor = orangeColor;
+            }
+            else if(elem.style.backgroundColor == yellowColor){
+                elem.style.backgroundColor = blueColor;
+            }
+        }
+        for (const elem of document.getElementsByClassName("keyboard-button")) {
+            if(elem.style.backgroundColor == greenColor){
+                elem.style.backgroundColor = orangeColor;
+            }
+            else if(elem.style.backgroundColor == yellowColor){
+                elem.style.backgroundColor = blueColor;
+            }
+        }
+        onColorblindMode = true;
+    }
+    else{
+        for (const elem of document.getElementsByClassName("letter-box")) {
+            if(elem.style.backgroundColor == orangeColor){
+                elem.style.backgroundColor = greenColor;
+            }
+            else if(elem.style.backgroundColor == blueColor){
+                elem.style.backgroundColor = yellowColor;
+            }
+        }
+        for (const elem of document.getElementsByClassName("keyboard-button")) {
+            if(elem.style.backgroundColor == orangeColor){
+                elem.style.backgroundColor = greenColor;
+            }
+            else if(elem.style.backgroundColor == blueColor){
+                elem.style.backgroundColor = yellowColor;
+            }
+        }
+        onColorblindMode = false;
+    }
+});
+openMenuButton.onclick = function(event){
+    menuModal.style.display = "block";
+}
+helpCloseButton.addEventListener("click", function(){
+    menuModal.style.display = "none";
+    modal2.style.display = "none";
+})
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target === modal2) {
         modal2.style.display = "none";
     }
+    else if(event.target === menuModal){
+        menuModal.style.display = "none";
+    }
 }
+
+
 //when the user clicks on gameboarf after game, pop up
 gameboard.onmouseover = function() {
     if(isClear) {
