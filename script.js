@@ -51,7 +51,7 @@ function handleResponse(csvText) {
   additionalMessage = sheetObjects[days]["TITLE"];
   additionalLink = sheetObjects[days]["LINK"];
   authorName = sheetObjects[days]["AUTHOR"];
-  console.log("Finished loaing spreadsheets");
+  console.log("Finished loading spreadsheets");
 }
 function csvToObjects(csv) {
     const csvRows = csv.split("\n");
